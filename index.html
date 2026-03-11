@@ -41,7 +41,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* --- Level 1 Spezifisch: Karussell mit Farbdynamik --- */
+        /* --- Level 1 Spezifisch --- */
         #carousel-container {
             height: 450px;
             perspective: 1200px;
@@ -82,10 +82,6 @@
             top: 10px; bottom: 10px; left: 5px; width: 1px;
             background: rgba(255,215,0,0.2);
         }
-        .syllable-book:hover {
-            box-shadow: 0 0 20px var(--magic-gold);
-            filter: brightness(1.2);
-        }
         .syllable-book.correct {
             transform: translateY(200px) scale(0) !important;
             opacity: 0;
@@ -100,10 +96,7 @@
             25% { transform: translate(-10px, 0) rotateY(var(--rot)); }
             75% { transform: translate(10px, 0) rotateY(var(--rot)); }
         }
-
-        .target-syllable {
-            transition: color 0.5s ease, text-shadow 0.5s ease;
-        }
+        .target-syllable { transition: color 0.5s ease; }
         .target-syllable.highlight {
             color: var(--magic-gold);
             text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
@@ -117,7 +110,7 @@
             border: 1.5px solid var(--ink);
             border-radius: 4px;
             cursor: pointer;
-            transition: transform 0.15s ease-out, box-shadow 0.2s, opacity 0.3s;
+            transition: transform 0.1s ease-out, box-shadow 0.2s, opacity 0.3s;
             user-select: none;
             box-shadow: 3px 3px 0px var(--ink);
             font-weight: 600;
@@ -154,7 +147,7 @@
             overflow: hidden; border-radius: 8px; height: 450px;
         }
         #spotlight {
-            position: absolute; width: 250px; height: 250px;
+            position: absolute; width: 150px; height: 150px;
             background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
             pointer-events: none; transform: translate(-50%, -50%); z-index: 20; mix-blend-mode: screen;
         }
@@ -165,7 +158,6 @@
         }
         .glyph.in-light { color: var(--magic-gold); filter: blur(0); text-shadow: 0 0 10px var(--magic-gold); }
         .glyph.wrong-glyph { color: #555; }
-        #inkwell-container { width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -181,37 +173,29 @@
         <button onclick="startLevel(1)" class="btn-ancient px-10 py-4 rounded-sm">Prüfung beginnen</button>
     </div>
 
-    <!-- ABSCHNITT I: Das Karussell der verlorenen Silben -->
+    <!-- ABSCHNITT I: Silben-Karussell -->
     <div id="level-1" class="hidden max-w-4xl w-full parchment-card p-10 rounded-sm space-y-6">
         <header class="flex justify-between items-center border-b border-black/10 pb-4">
             <span class="italic text-sm tracking-widest uppercase">Raum I: Die fliegenden Silben</span>
         </header>
         <div class="text-center space-y-1">
             <p class="text-sm uppercase tracking-widest opacity-60">Ziel-Zitat:</p>
-            <div id="target-quote-l1" class="text-2xl font-serif italic font-bold tracking-tight">
-                <!-- Spans werden hier generiert -->
-            </div>
+            <div id="target-quote-l1" class="text-2xl font-serif italic font-bold tracking-tight"></div>
         </div>
-
         <div id="carousel-container">
-            <div id="shelf-circle">
-                <!-- Bücher werden per JS eingefügt -->
-            </div>
+            <div id="shelf-circle"></div>
         </div>
-
         <div class="flex flex-col items-center gap-6 border-t border-black/5 pt-4">
-            <div id="l1-collected" class="hidden flex flex-wrap justify-center gap-2 min-h-[40px] px-4 py-2 bg-black/5 rounded-full border border-black/5 w-full max-w-lg">
-                <!-- Gesammelte Silben erscheinen hier -->
-            </div>
+            <div id="l1-collected" class="hidden"></div>
             <p id="l1-feedback" class="text-sm italic opacity-60">Fange die Silben in der korrekten Reihenfolge ein.</p>
         </div>
     </div>
 
-    <!-- ABSCHNITT II: Der Webstuhl -->
+    <!-- ABSCHNITT II: Der Webstuhl (AKTUALISIERT) -->
     <div id="level-2" class="hidden max-w-5xl w-full parchment-card p-8 rounded-sm space-y-6 min-h-[700px]">
         <header class="flex justify-between items-center border-b border-black/20 pb-4">
             <div class="flex items-center gap-6">
-                <div id="inkwell-container" onclick="tameTheStorm()">
+                <div id="inkwell-container" class="w-[70px] h-[70px] flex items-center justify-center cursor-pointer relative" onclick="tameTheStorm()">
                     <svg id="inkwell-svg" viewBox="0 0 64 64" class="w-full h-full transition-transform duration-500">
                         <path d="M16 28 C 16 20, 48 20, 48 28 L 52 56 C 52 60, 12 60, 12 56 Z" fill="#e2e8f0" stroke="#2c2420" stroke-width="2"/>
                         <rect x="24" y="20" width="16" height="8" rx="2" fill="#2c2420" />
@@ -226,7 +210,7 @@
                 </div>
             </div>
             <div id="status-indicator" class="hidden flex items-center gap-2 px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-bold border border-red-200">
-                <span class="hidden w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                 INSTABIL
             </div>
         </header>
@@ -246,13 +230,9 @@
         <div id="fail-hint" class="text-center text-red-700 font-bold opacity-0 transition-opacity italic text-sm">
             "Die Tinte im Fass... sie scheint das einzige zu sein, was hier wirklich haften bleibt."
         </div>
-        <div class="flex justify-center gap-6">
-            <button onclick="resetWeaver()" class="px-8 py-3 border border-black/20 text-xs font-black uppercase hover:bg-black hover:text-white transition-all rounded">Reset</button>
-            <button onclick="checkWeaver()" class="btn-ancient px-12 py-3 rounded">Satz versiegeln</button>
-        </div>
     </div>
 
-    <!-- ABSCHNITT III: Die flüsternden Glyphen -->
+    <!-- ABSCHNITT III: Archiv -->
     <div id="level-3" class="hidden max-w-4xl w-full parchment-card p-10 rounded-sm space-y-8">
         <header class="text-center border-b border-black/10 pb-4">
             <span class="italic text-sm tracking-widest uppercase">Raum III: Das Archiv der Schatten</span>
@@ -289,7 +269,8 @@
         function startLevel(n) {
             document.querySelectorAll('body > div').forEach(d => d.classList.add('hidden'));
             const id = typeof n === 'string' ? n : `level-${n}`;
-            document.getElementById(id).classList.remove('hidden');
+            const target = document.getElementById(id);
+            if (target) target.classList.remove('hidden');
             if(n === 1) initLevel1();
             if(n === 2) initLevel2();
             if(n === 3) initLevel3();
@@ -308,25 +289,15 @@
             const shelf = document.getElementById('shelf-circle');
             const collected = document.getElementById('l1-collected');
             const targetDisplay = document.getElementById('target-quote-l1');
-            
-            shelf.innerHTML = '';
-            collected.innerHTML = '';
-            targetDisplay.innerHTML = '';
-            
-            currentSyllableIndex = 0;
-            baseRotationSpeed = 0.8;
-            shelfRotation = 0;
+            shelf.innerHTML = ''; collected.innerHTML = ''; targetDisplay.innerHTML = '';
+            currentSyllableIndex = 0; baseRotationSpeed = 0.8; shelfRotation = 0;
 
-            // Zitat-Anzeige mit Spans initialisieren
             let syllableCount = 0;
             fullQuoteSegments.forEach((seg) => {
                 const span = document.createElement('span');
                 span.textContent = seg;
                 span.className = "target-syllable";
-                if (seg !== " ") {
-                    span.id = `target-syl-${syllableCount}`;
-                    syllableCount++;
-                }
+                if (seg !== " ") { span.id = `target-syl-${syllableCount}`; syllableCount++; }
                 targetDisplay.appendChild(span);
             });
 
@@ -337,13 +308,11 @@
                 book.textContent = s;
                 book.dataset.val = s;
                 book.dataset.angle = (i / scrambled.length) * 360;
-                
                 book.onmouseenter = () => { isHoveringBook = true; };
                 book.onmouseleave = () => { isHoveringBook = false; };
                 book.onclick = (e) => handleSyllableClick(book, e);
                 shelf.appendChild(book);
             });
-
             if(carouselReqId) cancelAnimationFrame(carouselReqId);
             animateShelf();
             updateBookColors();
@@ -352,13 +321,11 @@
         function updateBookColors() {
             const progress = currentSyllableIndex / syllables.length;
             const books = document.querySelectorAll('.syllable-book:not(.correct)');
-            
             books.forEach(book => {
                 const r = Math.round(94 + (212 - 94) * progress);
                 const g = Math.round(29 + (175 - 29) * progress);
                 const b = Math.round(29 + (55 - 29) * progress);
                 book.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-                
                 if (book.dataset.val === syllables[currentSyllableIndex]) {
                     book.style.boxShadow = `0 0 15px rgba(212, 175, 55, ${0.3 + progress * 0.7})`;
                 } else {
@@ -369,10 +336,8 @@
 
         function animateShelf() {
             if(document.getElementById('level-1').classList.contains('hidden')) return;
-            
             const targetSpeed = isHoveringBook ? baseRotationSpeed * 0.3 : baseRotationSpeed;
             shelfRotation += targetSpeed;
-
             const books = document.querySelectorAll('.syllable-book');
             books.forEach(book => {
                 const angle = (parseFloat(book.dataset.angle) + shelfRotation) % 360;
@@ -380,37 +345,31 @@
                 const z = Math.cos(rad) * 200;
                 const x = Math.sin(rad) * 250;
                 const opacity = (z + 200) / 400; 
-                
                 book.style.transform = `translateX(${x}px) translateZ(${z}px) rotateY(${-angle}deg)`;
                 book.style.opacity = opacity < 0.3 ? 0.2 : 1;
                 book.style.zIndex = Math.round(z + 200);
                 book.style.pointerEvents = z > 0 ? "auto" : "none"; 
                 book.style.setProperty('--rot', `${-angle}deg`);
             });
-
             carouselReqId = requestAnimationFrame(animateShelf);
         }
 
         function handleSyllableClick(book, e) {
             if(book.classList.contains('correct')) return;
-
             if(book.dataset.val === syllables[currentSyllableIndex]) {
                 book.classList.add('correct');
-                
-                // Segment im Ziel-Satz hervorheben
                 const targetSpan = document.getElementById(`target-syl-${currentSyllableIndex}`);
                 if (targetSpan) targetSpan.classList.add('highlight');
-
+                
+                // Gesammelte Silbe in die Leiste schieben
                 const word = document.createElement('span');
                 word.textContent = book.dataset.val;
                 word.className = "px-3 py-1 bg-magic-gold text-white font-bold rounded shadow-sm animate-bounce text-sm";
                 document.getElementById('l1-collected').appendChild(word);
-                
+
                 currentSyllableIndex++;
                 baseRotationSpeed *= 1.15; 
-
                 updateBookColors();
-
                 if(currentSyllableIndex === syllables.length) {
                     baseRotationSpeed = 0;
                     setTimeout(() => startLevel(2), 800);
@@ -421,72 +380,165 @@
             }
         }
 
-        /* --- LEVEL 2 --- */
+        /* --- LEVEL 2: DER WEBSTUHL (AKTUALISIERT) --- */
         const sentenceWords = ["Der", "schlaue", "Fuchs", "springt", "über", "den", "faulen", "Hund."];
         const wordShouts = ["Nö!", "Zu weit!", "Kriegst mich nicht!", "Fast!", "Daneben!", "Hahaha!", "Weg!", "Nope!"];
-        let stormActive = true, failCount = 0, tameClicks = 0;
-        function initLevel2() { resetWeaver(); document.addEventListener('mousemove', handleWordDodging); }
+        let stormActive = true, tameClicks = 0;
+
+        function initLevel2() { 
+            resetWeaver(); 
+            document.addEventListener('mousemove', handleWordDodging); 
+        }
+
+        function isOverlapping(el1, el2) {
+            const r1 = el1.getBoundingClientRect();
+            const r2 = el2.getBoundingClientRect();
+            const padding = 5;
+            return !(r1.right + padding < r2.left - padding || 
+                     r1.left - padding > r2.right + padding || 
+                     r1.bottom + padding < r2.top - padding || 
+                     r1.top - padding > r2.bottom + padding);
+        }
+
         function resetWeaver() {
             const area = document.getElementById('weaving-area'), targetZone = document.getElementById('target-zone');
             area.innerHTML = '';
             targetZone.querySelectorAll('.word-node').forEach(node => node.remove());
             document.getElementById('placeholder-text').style.display = 'block';
             document.getElementById('ink-spill').style.opacity = "0";
+            document.getElementById('status-indicator').classList.remove('hidden');
             document.getElementById('status-indicator').innerHTML = '<span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>INSTABIL';
             document.getElementById('status-indicator').className = "flex items-center gap-2 px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-bold border border-red-200";
+            document.getElementById('fail-hint').style.opacity = "0";
             tameClicks = 0; stormActive = true;
+
             sentenceWords.forEach((w, i) => {
                 const node = document.createElement('div');
                 node.className = "word-node floating"; node.textContent = w; node.dataset.shout = wordShouts[i % wordShouts.length];
-                node.style.left = (15 + (i * 10)) + "%"; node.style.top = (30 + (Math.sin(i * 1.5) * 20)) + "%";
-                node.style.position = "absolute"; node.onclick = () => selectWord(node); area.appendChild(node);
+                node.style.position = "absolute"; 
+                node.onclick = () => selectWord(node); 
+                area.appendChild(node);
+                
+                let placed = false;
+                let attempts = 0;
+                while(!placed && attempts < 100) {
+                    node.style.left = (Math.random() * 80 + 5) + "%";
+                    node.style.top = (Math.random() * 30 + 5) + "%";
+                    placed = true;
+                    const otherNodes = area.querySelectorAll('.word-node');
+                    for(let other of otherNodes) {
+                        if(other === node) continue;
+                        if(isOverlapping(node, other)) {
+                            placed = false;
+                            break;
+                        }
+                    }
+                    attempts++;
+                }
             });
         }
+
+        function resolveWordOverlap(movingWord, words) {
+            let collision = true;
+            let safety = 0;
+            while(collision && safety < 10) {
+                collision = false;
+                words.forEach(other => {
+                    if(movingWord === other || other.style.opacity === "0.1") return;
+                    if(isOverlapping(movingWord, other)) {
+                        collision = true;
+                        const r1 = movingWord.getBoundingClientRect();
+                        const r2 = other.getBoundingClientRect();
+                        const dx = (r1.left + r1.width/2) - (r2.left + r2.width/2);
+                        const dy = (r1.top + r1.height/2) - (r2.top + r2.height/2);
+                        const angle = Math.atan2(dy, dx);
+                        
+                        let curLeft = parseFloat(movingWord.style.left);
+                        let curTop = parseFloat(movingWord.style.top);
+                        movingWord.style.left = Math.max(2, Math.min(92, curLeft + Math.cos(angle) * 3)) + "%";
+                        movingWord.style.top = Math.max(2, Math.min(48, curTop + Math.sin(angle) * 3)) + "%";
+                    }
+                });
+                safety++;
+            }
+        }
+
         function handleWordDodging(e) {
             if(!stormActive) return;
-            const words = document.querySelectorAll('#weaving-area .word-node'), container = document.getElementById('weaving-container');
-            if (!container) return;
+            const words = document.querySelectorAll('#weaving-area .word-node');
+            const container = document.getElementById('weaving-container');
+            if(!container) return;
             const containerRect = container.getBoundingClientRect();
+
             words.forEach(w => {
-                const rect = w.getBoundingClientRect(), wordCenterX = rect.left + rect.width / 2, wordCenterY = rect.top + rect.height / 2;
+                const rect = w.getBoundingClientRect();
+                const wordCenterX = rect.left + rect.width / 2;
+                const wordCenterY = rect.top + rect.height / 2;
                 const distance = Math.hypot(e.clientX - wordCenterX, e.clientY - wordCenterY);
-                if(distance < 100) {
+
+                if(distance < 110) {
                     w.classList.add('agitated');
-                    const angle = Math.atan2(e.clientY - wordCenterY, e.clientX - wordCenterX), pushPower = (100 - distance) * 0.8;
-                    let nextLeft = parseFloat(w.style.left) - (Math.cos(angle) * pushPower / containerRect.width * 100);
-                    let nextTop = parseFloat(w.style.top) - (Math.sin(angle) * pushPower / containerRect.height * 100);
-                    w.style.left = Math.max(5, Math.min(90, nextLeft)) + "%"; w.style.top = Math.max(5, Math.min(90, nextTop)) + "%";
-                    w.style.transform = `rotate(${Math.random() * 20 - 10}deg) scale(1.1)`;
-                } else { w.classList.remove('agitated'); w.style.transform = ""; }
+                    const angle = Math.atan2(e.clientY - wordCenterY, e.clientX - wordCenterX);
+                    const pushPower = (110 - distance) * 1.2;
+                    let nextLeftPercent = parseFloat(w.style.left) - (Math.cos(angle) * pushPower / containerRect.width * 100);
+                    let nextTopPercent = parseFloat(w.style.top) - (Math.sin(angle) * pushPower / containerRect.height * 100);
+
+                    w.style.left = Math.max(2, Math.min(92, nextLeftPercent)) + "%";
+                    w.style.top = Math.max(2, Math.min(48, nextTopPercent)) + "%";
+                    w.style.transform = `rotate(${Math.random() * 10 - 5}deg) scale(1.05)`;
+                    
+                    resolveWordOverlap(w, words);
+                } else { 
+                    w.classList.remove('agitated'); 
+                    w.style.transform = ""; 
+                }
             });
         }
+
         function selectWord(el) {
-            if(el.parentElement.id === 'target-zone' || stormActive) {
-                if(stormActive) { el.style.left = Math.random() * 80 + 10 + "%"; el.style.top = Math.random() * 80 + 10 + "%"; }
+            if(stormActive) { 
+                document.getElementById('fail-hint').style.opacity = "1";
+                el.style.left = (Math.random() * 80 + 10) + "%"; 
+                el.style.top = (Math.random() * 40 + 5) + "%"; 
+                resolveWordOverlap(el, document.querySelectorAll('#weaving-area .word-node'));
                 return; 
             }
             const target = document.getElementById('target-zone'), placeholder = document.getElementById('placeholder-text');
             placeholder.style.display = 'none';
             const newEl = el.cloneNode(true); newEl.className = "word-node ink-stuck"; newEl.style.position = "static";
-            newEl.onclick = () => { newEl.remove(); el.style.opacity = "1"; el.style.pointerEvents = "auto"; if(target.querySelectorAll('.word-node').length === 0) placeholder.style.display = 'block'; };
+            newEl.onclick = () => { 
+                newEl.remove(); el.style.opacity = "1"; el.style.pointerEvents = "auto"; 
+                if(target.querySelectorAll('.word-node').length === 0) placeholder.style.display = 'block';
+                checkWeaver();
+            };
             target.appendChild(newEl); el.style.opacity = "0.1"; el.style.pointerEvents = "none";
+            checkWeaver();
         }
+
         function tameTheStorm() {
             tameClicks++; document.getElementById('inkwell-svg').style.transform = `rotate(${tameClicks * 18}deg) scale(${1 + tameClicks * 0.05})`;
             if(tameClicks >= 5) {
-                stormActive = false; document.getElementById('ink-spill').style.opacity = "1";
+                stormActive = false; 
+                document.getElementById('ink-spill').style.opacity = "1";
                 document.getElementById('status-indicator').innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span>GEBÄNDIGT';
                 document.getElementById('status-indicator').className = "flex items-center gap-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold border border-green-200";
-                document.querySelectorAll('#weaving-area .word-node').forEach(w => { w.classList.add('ink-stuck'); w.classList.remove('floating'); });
+                document.querySelectorAll('#weaving-area .word-node').forEach(w => { 
+                    w.classList.add('ink-stuck'); 
+                    w.classList.remove('floating'); 
+                    w.style.transform = "";
+                });
+                document.getElementById('fail-hint').style.opacity = "0";
             }
         }
+
         function checkWeaver() {
             const userWords = Array.from(document.querySelectorAll('#target-zone .word-node')).map(n => n.textContent);
-            if(userWords.join(' ') === sentenceWords.join(' ')) startLevel(3);
-            else { failCount++; if(failCount >= 3) document.getElementById('fail-hint').style.opacity = "1"; }
+            if(userWords.join(' ') === sentenceWords.join(' ')) {
+                setTimeout(() => startLevel(3), 600);
+            }
         }
 
-        /* --- LEVEL 3 --- */
+        /* --- LEVEL 3: ARCHIV --- */
         const l3TargetWord = "GEDANKENFLUG";
         let foundGlyphs = "";
         let glyphInterval;
@@ -509,7 +561,7 @@
             spotlight.style.left = x + "px"; spotlight.style.top = y + "px";
             document.querySelectorAll('.glyph').forEach(g => {
                 const dist = Math.hypot(x - (g.offsetLeft + 15), y - (g.offsetTop + 15));
-                if (dist < 100) g.classList.add('in-light'); else g.classList.remove('in-light');
+                if (dist < 50) g.classList.add('in-light'); else g.classList.remove('in-light');
             });
         }
         function moveGlyphsRandomly() {
@@ -523,14 +575,18 @@
             const char = g.dataset.char, isReal = g.dataset.real === "true", nextNeeded = l3TargetWord[foundGlyphs.length];
             if (isReal && char === nextNeeded) {
                 foundGlyphs += char; g.remove(); updateL3Display();
-                if (foundGlyphs === l3TargetWord) { clearInterval(glyphInterval); setTimeout(() => startLevel('success-screen'), 500); }
-            } else { flashError(); document.querySelectorAll('.glyph').forEach(g => { g.style.left = Math.random() * 90 + "%"; g.style.top = Math.random() * 90 + "%"; }); }
+                if (foundGlyphs === l3TargetWord) { 
+                    clearInterval(glyphInterval); 
+                    setTimeout(() => startLevel('success-screen'), 500); 
+                }
+            } else { flashError(); }
         }
         function updateL3Display() {
             const display = document.getElementById('found-word-display'); display.innerHTML = '';
             foundGlyphs.split('').forEach(c => {
                 const s = document.createElement('span'); s.textContent = c; s.className = "text-magic-gold animate-pulse"; display.appendChild(s);
             });
+            display.classList.toggle('hidden', foundGlyphs.length === 0);
             document.getElementById('l3-target-display').innerHTML = l3TargetWord.split('').map((c, i) => `<span style="color: ${i < foundGlyphs.length ? '#d4af37' : '#94a3b8'}">${c}</span>`).join('');
         }
         function flashError() {
